@@ -26,35 +26,47 @@ class App
   end
 
   def books_list()
-    display_items(@books, 'Books') { |book| "Book Id: #{book.id}, Book Name: #{book.label.title}, Publisher: #{book.publisher}" }
+    display_items(@books, 'Books') do |book|
+      "Book Id: #{book.id}, Book Name: #{book.label.title}, Publisher: #{book.publisher}"
+    end
   end
 
   def music_albums_list()
-    display_items(@music_albums, 'Music Albums') { |album| "Album Id: #{album.id}, , Music Name: #{album.label.title}, On Spotify: #{album.on_spotify}" }
+    display_items(@music_albums, 'Music Albums') do |album|
+      "Album Id: #{album.id}, , Music Name: #{album.label.title}, On Spotify: #{album.on_spotify}"
+    end
   end
 
   def movies_list()
-    display_items(@movies, 'Movies') { |movie| "Movie Id: #{movie.id}, Movie Name: #{movie.label.title}, Silent: #{movie.silent}" }
+    display_items(@movies, 'Movies') do |movie|
+      "Movie Id: #{movie.id}, Movie Name: #{movie.label.title}, Silent: #{movie.silent}"
+    end
   end
 
   def games_list()
-    display_items(@games, 'Games') { |game| "Game Id: #{game.id}, Game Name: #{game.label.title}, , Multiplayer: #{game.multiplayer}" }
+    display_items(@games, 'Games') do |game|
+      "Game Id: #{game.id}, Game Name: #{game.label.title}, , Multiplayer: #{game.multiplayer}"
+    end
   end
 
   def genres_list()
-    display_items(@genres, 'Genres') { |genre| "Genre Id: #{genre.id}, Genre Name: #{genre.name}"  }
+    display_items(@genres, 'Genres') { |genre| "Genre Id: #{genre.id}, Genre Name: #{genre.name}" }
   end
 
   def sources_list()
-    display_items(@sources, 'Sources') { |source| "Source Id: #{source.id}, Source Name: #{source.name}"  }
+    display_items(@sources, 'Sources') { |source| "Source Id: #{source.id}, Source Name: #{source.name}" }
   end
 
   def labels_list()
-    display_items(@labels, 'Labels') { |label| "Label Id: #{label.id}, Label Title: #{label.title}, Label Color: #{label.color}"  }
+    display_items(@labels, 'Labels') do |label|
+      "Label Id: #{label.id}, Label Title: #{label.title}, Label Color: #{label.color}"
+    end
   end
 
   def authors_list()
-    display_items(@authors, 'Authors') { |author| "Author Id: #{author.id}, Author: #{author.first_name} #{author.last_name}" }
+    display_items(@authors, 'Authors') do |author|
+      "Author Id: #{author.id}, Author: #{author.first_name} #{author.last_name}"
+    end
   end
 
   def add_book()
@@ -257,11 +269,14 @@ class App
     file_data.map do |item|
       genre = @genres.find { |g| g.name == item['genre']['name'] }
       source = @sources.find { |s| s.name == item['source']['name'] }
-      author = @authors.find { |a| a.first_name == item['author']['first_name'] && a.last_name == item['author']['last_name']}
-      label = @labels.find { |l| l.title == item['label']['title'] && l.color == item['label']['color']}
+      author = @authors.find do |a|
+        a.first_name == item['author']['first_name'] && a.last_name == item['author']['last_name']
+      end
+      label = @labels.find { |l| l.title == item['label']['title'] && l.color == item['label']['color'] }
       case file
       when 'books.json'
-        book = Book.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'], publisher: item['publisher'], cover_state: item['cover_state'])
+        book = Book.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'],
+                        publisher: item['publisher'], cover_state: item['cover_state'])
         book.id = item['id']
         book.genre = genre
         book.source = source
@@ -269,7 +284,8 @@ class App
         book.label = label
         book
       when 'music_albums.json'
-        album = Music.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'], on_spotify: item['on_spotify'])
+        album = Music.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'],
+                          on_spotify: item['on_spotify'])
         album.id = item['id']
         album.genre = genre
         album.source = source
@@ -277,7 +293,8 @@ class App
         album.label = label
         album
       when 'movies.json'
-        movie = Movie.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'], silent: item['silent'])
+        movie = Movie.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'],
+                          silent: item['silent'])
         movie.id = item['id']
         movie.genre = genre
         movie.source = source
@@ -285,7 +302,8 @@ class App
         movie.label = label
         movie
       when 'games.json'
-        game = Game.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'], multiplayer: item['multiplayer'], last_played_at: Date.parse(item['last_played_at']))
+        game = Game.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'],
+                        multiplayer: item['multiplayer'], last_played_at: Date.parse(item['last_played_at']))
         game.id = item['id']
         game.genre = genre
         game.source = source
