@@ -4,12 +4,12 @@ require 'json'
 class Music < Item
   attr_accessor :on_spotify
 
-  def initialize(id: nil, publish_date: nil, archived: false, on_spotify: false)
-    super(id: id, publish_date: publish_date, archived: archived)
+  def initialize(publish_date: nil, archived: false, on_spotify: false)
+    super(publish_date: publish_date, archived: archived)
     @on_spotify = on_spotify
   end
 
-  def to_json(options = {})
+  def to_json(option = {})
     {
       id: @id,
       genre: @genre,
@@ -19,7 +19,7 @@ class Music < Item
       publish_date: @publish_date,
       archived: @archived,
       on_spotify: @on_spotify
-    }.to_json(options)
+    }.to_json(option)
   end
 
   private

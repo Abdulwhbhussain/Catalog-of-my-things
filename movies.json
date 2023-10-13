@@ -1,2 +1,26 @@
 [
+  {
+    "id": 972,
+    "genre": {
+      "id": 296,
+      "name": "Thriller"
+    },
+    "source": {
+      "id": 631,
+      "name": "tv"
+    },
+    "label": {
+      "id": 817,
+      "title": "Dark",
+      "color": "blue"
+    },
+    "author": {
+      "id": 612,
+      "first_name": "Abdul",
+      "last_name": "Qudoos"
+    },
+    "publish_date": "2023-02-19",
+    "archived": false,
+    "silent": true
+  }
 ]

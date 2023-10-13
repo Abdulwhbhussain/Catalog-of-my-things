@@ -5,13 +5,13 @@ require 'json'
 class Game < Item
   attr_accessor :multiplayer, :last_played_at
 
-  def initialize(id: nil, publish_date: nil, archived: false, multiplayer: false, last_played_at: nil)
-    super(id: id, publish_date: publish_date, archived: archived)
+  def initialize(publish_date: nil, archived: false, multiplayer: false, last_played_at: nil)
+    super(publish_date: publish_date, archived: archived)
     @multiplayer = multiplayer
     @last_played_at = last_played_at
   end
 
-  def to_json(options = {})
+  def to_json(option = {})
     {
       id: @id,
       genre: @genre,
@@ -22,7 +22,7 @@ class Game < Item
       archived: @archived,
       multiplayer: @multiplayer,
       last_played_at: @last_played_at
-    }.to_json(options)
+    }.to_json(option)
   end
 
   private

@@ -4,12 +4,12 @@ require 'json'
 class Movie < Item
   attr_accessor :silent
 
-  def initialize(id: nil, publish_date: nil, archived: false, silent: false)
-    super(id: id, publish_date: publish_date, archived: archived)
+  def initialize(publish_date: nil, archived: false, silent: false)
+    super(publish_date: publish_date, archived: archived)
     @silent = silent
   end
 
-  def to_json(options = {})
+  def to_json(option = {})
     {
       id: @id,
       genre: @genre,
@@ -19,7 +19,7 @@ class Movie < Item
       publish_date: @publish_date,
       archived: @archived,
       silent: @silent
-    }.to_json(options)
+    }.to_json(option)
   end
 
   private

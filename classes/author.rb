@@ -1,11 +1,11 @@
 require 'json'
 
 class Author
-  attr_reader :id, :items
-  attr_accessor :first_name, :last_name
+  attr_reader :items
+  attr_accessor :first_name, :last_name, :id
 
-  def initialize(id: nil, first_name: 'unknown', last_name: 'unknown')
-    @id = Random.rand(1..1000) if id.nil?
+  def initialize(first_name: 'unknown', last_name: 'unknown')
+    @id = Random.rand(1..1000)
     @first_name = first_name
     @last_name = last_name
     @items = []
@@ -16,12 +16,11 @@ class Author
     item.author = self
   end
 
-  def to_json(options = {})
+  def to_json(option = {})
     {
       id: @id,
       first_name: @first_name,
-      last_name: @last_name,
-      items: @items
+      last_name: @last_name
     }.to_json(option)
   end
 end

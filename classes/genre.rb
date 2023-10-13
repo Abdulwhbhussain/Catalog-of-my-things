@@ -1,11 +1,11 @@
 require 'json'
 
 class Genre
-  attr_reader :id, :items
-  attr_accessor :name
+  attr_reader :items
+  attr_accessor :name, :id
 
-  def initialize(id: nil, name: 'unknown')
-    @id = Random.rand(1..1000) if id.nil?
+  def initialize(name: 'unknown')
+    @id = Random.rand(1..1000)
     @name = name
     @items = []
   end
@@ -15,11 +15,10 @@ class Genre
     item.genre = self
   end
 
-  def to_json(options = {})
+  def to_json(option = {})
     {
       id: @id,
-      name: @name,
-      items: @items
+      name: @name
     }.to_json(option)
   end
 end

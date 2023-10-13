@@ -1,11 +1,11 @@
 require 'json'
 
 class Label
-  attr_reader :id, :items
-  attr_accessor :title, :color
+  attr_reader :items
+  attr_accessor :title, :color, :id
 
-  def initialize(id: nil, title: 'unknown', color: 'Unspecified')
-    @id = Random.rand(1..1000) if id.nil?
+  def initialize(title: 'unknown', color: 'Unspecified')
+    @id = Random.rand(1..1000)
     @title = title
     @color = color
     @items = []
@@ -16,12 +16,11 @@ class Label
     item.label = self
   end
 
-  def to_json(options = {})
+  def to_json(option = {})
     {
       id: @id,
       title: @title,
-      color: @color,
-      items: @items
+      color: @color
     }.to_json(option)
   end
 end

@@ -15,18 +15,18 @@ class App
   attr_accessor :books, :music_albums, :movies, :games, :genres, :labels, :authors, :sources
 
   def initialize
-    @genres = load_data('genres.json')
-    @labels = load_data('labels.json')
-    @authors = load_data('authors.json')
-    @sources = load_data('sources.json')
-    @books = load_data('books.json')
-    @music_albums = load_data('music_albums.json')
-    @movies = load_data('movies.json')
-    @games = load_data('games.json')
+    @genres = load_data('genres.json') # []
+    @labels = load_data('labels.json') # []
+    @authors = load_data('authors.json') # []
+    @sources = load_data('sources.json') # []
+    @books = load_data('books.json') # []
+    @music_albums = load_data('music_albums.json') # []
+    @movies = load_data('movies.json') # []
+    @games = load_data('games.json') # []
   end
 
   def books_list()
-    display_items(@books, 'Books') { |book| "Book Id: #{book.id}, , Book Name: #{book.label.title}, Publisher: #{book.publisher}" }
+    display_items(@books, 'Books') { |book| "Book Id: #{book.id}, Book Name: #{book.label.title}, Publisher: #{book.publisher}" }
   end
 
   def music_albums_list()
@@ -149,40 +149,59 @@ class App
   # end
 
   def save_data()
-    File.write('books.json', JSON.pretty_generate(@books))
-    File.write('music_albums.json', JSON.pretty_generate(@music_albums))
-    File.write('movies.json', JSON.pretty_generate(@movies))
-    File.write('games.json', JSON.pretty_generate(@games))
     File.write('genres.json', JSON.pretty_generate(@genres))
     File.write('labels.json', JSON.pretty_generate(@labels))
     File.write('authors.json', JSON.pretty_generate(@authors))
     File.write('sources.json', JSON.pretty_generate(@sources))
+    File.write('books.json', JSON.pretty_generate(@books))
+    File.write('music_albums.json', JSON.pretty_generate(@music_albums))
+    File.write('movies.json', JSON.pretty_generate(@movies))
+    File.write('games.json', JSON.pretty_generate(@games))
   end
 
   def load_data(file)
     if File.exist?(file)
       file_data = JSON.parse(File.read(file))
+      data = []
       case file
       when 'books.json'
-        parse_data(file_data, file)
+        data = parse_data(file_data, file)
       when 'music_albums.json'
-        parse_data(file_data, file)
+        data = parse_data(file_data, file)
       when 'movies.json'
-        parse_data(file_data, file)
+        data = parse_data(file_data, file)
       when 'games.json'
-        parse_data(file_data, file)
+        data = parse_data(file_data, file)
       when 'genres.json'
-        file_data.map { |genre| Genre.new(genre['id'], genre['name']) }
+        file_data.map do |genre|
+          item = Genre.new(name: genre['name'])
+          item.id = genre['id']
+          data.push(item)
+        end
       when 'labels.json'
-        file_data.map { |label| Label.new(label['id'], label['title'], label['color']) }
+        file_data.map do |label|
+          item = Label.new(title: label['title'], color: label['color'])
+          item.id = label['id']
+          data.push(item)
+        end
       when 'authors.json'
-        file_data.map { |author| Author.new(author['id'], author['first_name'], author['last_name']) }
+        file_data.map do |author|
+          item = Author.new(first_name: author['first_name'], last_name: author['last_name'])
+          item.id = author['id']
+          data.push(item)
+        end
       when 'sources.json'
-        file_data.map { |source| Source.new(source['id'], source['name']) }
+        file_data.map do |source|
+          item = Source.new(name: source['name'])
+          item.id = source['id']
+          data.push(item)
+        end
       else
         puts "#{file} does not exist!"
       end
+      return data
     end
+    []
   end
 
   private
@@ -242,28 +261,32 @@ class App
       label = @labels.find { |l| l.title == item['label']['title'] && l.color == item['label']['color']}
       case file
       when 'books.json'
-        book = Book.new(id: item['id'], publish_date: Date.parse(item['publish_date']), archived: item['archived'], publisher: item['publisher'], cover_state: item['cover_state'])
+        book = Book.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'], publisher: item['publisher'], cover_state: item['cover_state'])
+        book.id = item['id']
         book.genre = genre
         book.source = source
         book.author = author
         book.label = label
         book
       when 'music_albums.json'
-        album = Music.new(id: item['id'], publish_date: Date.parse(item['publish_date']), archived: item['archived'], on_spotify: item['on_spotify'])
+        album = Music.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'], on_spotify: item['on_spotify'])
+        album.id = item['id']
         album.genre = genre
         album.source = source
         album.author = author
         album.label = label
         album
       when 'movies.json'
-        movie = Movie.new(id: item['id'], publish_date: Date.parse(item['publish_date']), archived: item['archived'], silent: item['silent'])
+        movie = Movie.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'], silent: item['silent'])
+        movie.id = item['id']
         movie.genre = genre
         movie.source = source
         movie.author = author
         movie.label = label
         movie
       when 'games.json'
-        game = Game.new(id: item['id'], publish_date: Date.parse(item['publish_date']), archived: item['archived'], multiplayer: item['multiplayer'], last_played_at: Date.parse(item['last_played_at']))
+        game = Game.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'], multiplayer: item['multiplayer'], last_played_at: Date.parse(item['last_played_at']))
+        game.id = item['id']
         game.genre = genre
         game.source = source
         game.author = author
