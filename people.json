@@ -1,0 +1,42 @@
+[
+  {
+    "id": 534,
+    "name": "Wahab",
+    "age": 23,
+    "parent_permission": true,
+    "classroom": null
+  },
+  {
+    "id": 416,
+    "name": "Mazher",
+    "age": 45,
+    "specialization": "Electronics"
+  },
+  {
+    "id": 517,
+    "name": "Tanmayi",
+    "age": 24,
+    "parent_permission": false,
+    "classroom": null
+  },
+  {
+    "id": 236,
+    "name": "Adil",
+    "age": 33,
+    "parent_permission": false,
+    "classroom": null
+  },
+  {
+    "id": 928,
+    "name": "naomi",
+    "age": 43,
+    "specialization": "course"
+  },
+  {
+    "id": 459,
+    "name": "nina",
+    "age": 12,
+    "parent_permission": true,
+    "classroom": null
+  }
+]

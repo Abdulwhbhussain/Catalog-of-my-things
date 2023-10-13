@@ -1,0 +1,44 @@
+[
+  {
+    "date": "1234-12-1",
+    "book": {
+      "title": "Game of Thrones",
+      "author": "Eliot"
+    },
+    "person": {
+      "id": 534,
+      "name": "Wahab",
+      "age": 23,
+      "parent_permission": true,
+      "classroom": null
+    }
+  },
+  {
+    "date": "1234-23-1",
+    "book": {
+      "title": "RAW",
+      "author": "India"
+    },
+    "person": {
+      "id": 459,
+      "name": "nina",
+      "age": 12,
+      "parent_permission": true,
+      "classroom": null
+    }
+  },
+  {
+    "date": "2023-12-14",
+    "book": {
+      "title": "eel",
+      "author": "Water"
+    },
+    "person": {
+      "id": 517,
+      "name": "Tanmayi",
+      "age": 24,
+      "parent_permission": false,
+      "classroom": null
+    }
+  }
+]
