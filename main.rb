@@ -19,6 +19,18 @@ end
 
 class Choices
   def user_choices(number, app)
+    if number >= 1 && number <= 4
+      list_items(number, app)
+    elsif number >= 5 && number <= 8
+      list_categories(number, app)
+    elsif number >= 9 && number <= 12
+      add_items(number, app)
+    else
+      puts 'Thank you for using My Catalog!'
+    end
+  end
+
+  def list_items(number, app)
     case number
     when 1
       app.books_list
@@ -28,6 +40,11 @@ class Choices
       app.movies_list
     when 4
       app.games_list
+    end
+  end
+
+  def list_categories(number, app)
+    case number
     when 5
       app.genres_list
     when 6
@@ -36,6 +53,11 @@ class Choices
       app.labels_list
     when 8
       app.authors_list
+    end
+  end
+
+  def add_items(number, app)
+    case number
     when 9
       app.add_book
     when 10
@@ -44,8 +66,6 @@ class Choices
       app.add_movie
     when 12
       app.add_game
-    else
-      puts 'Thank you for using My Catalog!'
     end
   end
 end
