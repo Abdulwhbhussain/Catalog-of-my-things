@@ -3,7 +3,7 @@ require 'rspec'
 
 describe Item do
   before(:each) do
-    @item = 
+    @item =
       Item.new(
         publish_date: Date.new(2000, 1, 1),
         archived: false

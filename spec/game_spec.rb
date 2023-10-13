@@ -3,7 +3,7 @@ require 'rspec'
 
 describe Game do
   before(:each) do
-    @game = 
+    @game =
       Game.new(
         publish_date: Date.new(2000, 1, 1),
         archived: true,

@@ -3,7 +3,7 @@ require 'rspec'
 
 describe Movie do
   before(:each) do
-    @movie = 
+    @movie =
       Movie.new(
         publish_date: Date.new(2000, 1, 1),
         archived: true,

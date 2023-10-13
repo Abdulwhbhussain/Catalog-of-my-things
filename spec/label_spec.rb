@@ -3,7 +3,7 @@ require 'rspec'
 
 describe Label do
   before(:each) do
-    @label = 
+    @label =
       Label.new(
         title: 'Warner Bros.',
         color: 'Blue'

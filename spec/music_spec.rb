@@ -3,7 +3,7 @@ require 'rspec'
 
 describe Music do
   before(:each) do
-    @music = 
+    @music =
       Music.new(
         publish_date: Date.new(2000, 1, 1),
         archived: true,
