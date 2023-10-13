@@ -1,5 +1,6 @@
 require_relative 'item'
 require 'date'
+require 'json'
 
 class Game < Item
   attr_accessor :multiplayer, :last_played_at
@@ -8,6 +9,20 @@ class Game < Item
     super(id: id, publish_date: publish_date, archived: archived)
     @multiplayer = multiplayer
     @last_played_at = last_played_at
+  end
+
+  def to_json(options = {})
+    {
+      id: @id,
+      genre: @genre,
+      source: @source,
+      label: @label,
+      author: @author,
+      publish_date: @publish_date,
+      archived: @archived,
+      multiplayer: @multiplayer,
+      last_played_at: @last_played_at
+    }.to_json(options)
   end
 
   private

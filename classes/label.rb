@@ -1,3 +1,5 @@
+require 'json'
+
 class Label
   attr_reader :id, :items
   attr_accessor :title, :color
@@ -12,5 +14,14 @@ class Label
   def add_item(item)
     @items << item
     item.label = self
+  end
+
+  def to_json(options = {})
+    {
+      id: @id,
+      title: @title,
+      color: @color,
+      items: @items
+    }.to_json(option)
   end
 end

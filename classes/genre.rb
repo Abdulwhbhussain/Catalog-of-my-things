@@ -1,3 +1,5 @@
+require 'json'
+
 class Genre
   attr_reader :id, :items
   attr_accessor :name
@@ -11,5 +13,13 @@ class Genre
   def add_item(item)
     @items << item
     item.genre = self
+  end
+
+  def to_json(options = {})
+    {
+      id: @id,
+      name: @name,
+      items: @items
+    }.to_json(option)
   end
 end

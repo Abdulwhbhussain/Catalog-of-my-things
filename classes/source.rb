@@ -1,3 +1,5 @@
+require 'json'
+
 class Source
   attr_reader :id, :items
   attr_accessor :name
@@ -11,5 +13,13 @@ class Source
   def add_item(item)
     @items << item
     item.source = self
+  end
+
+  def to_json(options = {})
+    {
+      id: @id,
+      name: @name,
+      items: @items
+    }.to_json(option)
   end
 end

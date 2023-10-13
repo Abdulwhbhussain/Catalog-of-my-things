@@ -1,3 +1,5 @@
+require 'json'
+
 class Author
   attr_reader :id, :items
   attr_accessor :first_name, :last_name
@@ -12,5 +14,14 @@ class Author
   def add_item(item)
     @items << item
     item.author = self
+  end
+
+  def to_json(options = {})
+    {
+      id: @id,
+      first_name: @first_name,
+      last_name: @last_name,
+      items: @items
+    }.to_json(option)
   end
 end

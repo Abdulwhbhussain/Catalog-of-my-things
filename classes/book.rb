@@ -1,4 +1,5 @@
 require_relative 'item'
+require 'json'
 
 class Book < Item
   attr_accessor :publisher, :cover_state
@@ -7,6 +8,20 @@ class Book < Item
     super(id: id, publish_date: publish_date, archived: archived)
     @publisher = publisher
     @cover_state = cover_state
+  end
+
+  def to_json(options = {})
+    {
+      id: @id,
+      genre: @genre,
+      source: @source,
+      label: @label,
+      author: @author,
+      publish_date: @publish_date,
+      archived: @archived,
+      publisher: @publisher,
+      cover_state: @cover_state
+    }.to_json(options)
   end
 
   private
