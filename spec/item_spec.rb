@@ -1,4 +1,4 @@
-require_relative '../classes/item.rb'
+require_relative '../classes/item'
 require 'rspec'
 
 describe Item do

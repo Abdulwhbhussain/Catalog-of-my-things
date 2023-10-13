@@ -1,4 +1,4 @@
-require_relative '../classes/game.rb'
+require_relative '../classes/game'
 require 'rspec'
 
 describe Game do

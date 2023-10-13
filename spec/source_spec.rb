@@ -1,4 +1,4 @@
-require_relative '../classes/source.rb'
+require_relative '../classes/source'
 require 'rspec'
 
 describe Source do

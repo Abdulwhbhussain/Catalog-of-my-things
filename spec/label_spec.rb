@@ -1,4 +1,4 @@
-require_relative '../classes/label.rb'
+require_relative '../classes/label'
 require 'rspec'
 
 describe Label do

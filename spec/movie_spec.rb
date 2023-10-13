@@ -1,4 +1,4 @@
-require_relative '../classes/movie.rb'
+require_relative '../classes/movie'
 require 'rspec'
 
 describe Movie do

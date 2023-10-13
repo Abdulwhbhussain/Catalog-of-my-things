@@ -1,4 +1,4 @@
-require_relative '../classes/music.rb'
+require_relative '../classes/music'
 require 'rspec'
 
 describe Music do
