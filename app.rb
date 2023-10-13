@@ -15,14 +15,14 @@ class App
   attr_accessor :books, :music_albums, :movies, :games, :genres, :labels, :authors, :sources
 
   def initialize
-    @books = [] # load_data('books.json')
-    @music_albums = [] # load_data('people.json')
-    @movies = [] # load_data('rentals.json')
-    @games = []
-    @genres = []
-    @labels = []
-    @authors = []
-    @sources = []
+    @genres = load_data('genres.json')
+    @labels = load_data('labels.json')
+    @authors = load_data('authors.json')
+    @sources = load_data('sources.json')
+    @books = load_data('books.json')
+    @music_albums = load_data('music_albums.json')
+    @movies = load_data('movies.json')
+    @games = load_data('games.json')
   end
 
   def books_list()
@@ -150,8 +150,13 @@ class App
 
   def save_data()
     File.write('books.json', JSON.pretty_generate(@books))
-    File.write('people.json', JSON.pretty_generate(@people))
-    File.write('rentals.json', JSON.pretty_generate(@rentals))
+    File.write('music_albums.json', JSON.pretty_generate(@music_albums))
+    File.write('movies.json', JSON.pretty_generate(@movies))
+    File.write('games.json', JSON.pretty_generate(@games))
+    File.write('genres.json', JSON.pretty_generate(@genres))
+    File.write('labels.json', JSON.pretty_generate(@labels))
+    File.write('authors.json', JSON.pretty_generate(@authors))
+    File.write('sources.json', JSON.pretty_generate(@sources))
   end
 
   def load_data(file)
@@ -159,14 +164,24 @@ class App
       file_data = JSON.parse(File.read(file))
       case file
       when 'books.json'
-        file_data.map { |book| Book.new(book['title'], book['author']) }
-      when 'people.json'
-        parse_people_data(file_data)
-      when 'rentals.json'
-        parse_rentals_data(file_data)
+        parse_data(file_data, file)
+      when 'music_albums.json'
+        parse_data(file_data, file)
+      when 'movies.json'
+        parse_data(file_data, file)
+      when 'games.json'
+        parse_data(file_data, file)
+      when 'genres.json'
+        file_data.map { |genre| Genre.new(genre['id'], genre['name']) }
+      when 'labels.json'
+        file_data.map { |label| Label.new(label['id'], label['title'], label['color']) }
+      when 'authors.json'
+        file_data.map { |author| Author.new(author['id'], author['first_name'], author['last_name']) }
+      when 'sources.json'
+        file_data.map { |source| Source.new(source['id'], source['name']) }
+      else
+        puts "#{file} does not exist!"
       end
-    else
-      puts "#{file} does not exist!"
     end
   end
 
@@ -217,6 +232,47 @@ class App
   def get_user_input(prompt)
     print prompt
     gets.chomp
+  end
+
+  def parse_data(file_data, file)
+    file_data.map do |item|
+      genre = @genres.find { |g| g.name == item['genre']['name'] }
+      source = @sources.find { |s| s.name == item['source']['name'] }
+      author = @authors.find { |a| a.first_name == item['author']['first_name'] && a.last_name == item['author']['last_name']}
+      label = @labels.find { |l| l.title == item['label']['title'] && l.color == item['label']['color']}
+      case file
+      when 'books.json'
+        book = Book.new(id: item['id'], publish_date: Date.parse(item['publish_date']), archived: item['archived'], publisher: item['publisher'], cover_state: item['cover_state'])
+        book.genre = genre
+        book.source = source
+        book.author = author
+        book.label = label
+        book
+      when 'music_albums.json'
+        album = Music.new(id: item['id'], publish_date: Date.parse(item['publish_date']), archived: item['archived'], on_spotify: item['on_spotify'])
+        album.genre = genre
+        album.source = source
+        album.author = author
+        album.label = label
+        album
+      when 'movies.json'
+        movie = Movie.new(id: item['id'], publish_date: Date.parse(item['publish_date']), archived: item['archived'], silent: item['silent'])
+        movie.genre = genre
+        movie.source = source
+        movie.author = author
+        movie.label = label
+        movie
+      when 'games.json'
+        game = Game.new(id: item['id'], publish_date: Date.parse(item['publish_date']), archived: item['archived'], multiplayer: item['multiplayer'], last_played_at: Date.parse(item['last_played_at']))
+        game.genre = genre
+        game.source = source
+        game.author = author
+        game.label = label
+        game
+      else
+        puts "#{file} does not exist!"
+      end
+    end
   end
 
   # def parse_people_data(file_data)
