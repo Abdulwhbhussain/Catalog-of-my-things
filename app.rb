@@ -11,6 +11,23 @@ require_relative 'classes/source'
 require_relative 'classes/genre'
 require_relative 'classes/label'
 
+def get_user_input(prompt)
+  print prompt
+  gets.chomp
+end
+
+def display_items(items, kind)
+  if items.empty?
+    puts "Record of #{kind}: 0 found "
+  else
+    puts "Listing all #{kind}:"
+    items.each_with_index do |item, index|
+      puts "#{index + 1}) #{yield(item)}"
+    end
+    puts ' '
+  end
+end
+
 class App
   attr_accessor :books, :music_albums, :movies, :games, :genres, :labels, :authors, :sources
 
@@ -69,6 +86,14 @@ class App
     end
   end
 
+  def add_categories(item)
+    item.genre = add_genre
+    item.author = add_author
+    item.source = add_source
+    item.label = add_label
+    item
+  end
+
   def add_book()
     puts 'Adding a book:'
     publisher = get_user_input('Publisher: ')
@@ -76,10 +101,7 @@ class App
     publish_date = Date.parse(get_user_input('Publish Date (YYYY-MM-DD): '))
     archived = get_user_input('Is it archived? [Y/N]: ').casecmp('Y').zero?
     book = Book.new(publish_date: publish_date, archived: archived, publisher: publisher, cover_state: cover_state)
-    book.genre = add_genre
-    book.author = add_author
-    book.source = add_source
-    book.label = add_label
+    book = add_categories(book)
     @books.push(book)
     puts 'Book Added successfully'
     puts ' '
@@ -91,10 +113,7 @@ class App
     publish_date = Date.parse(get_user_input('Publish Date (YYYY-MM-DD): '))
     archived = get_user_input('Is it archived? [Y/N]: ').casecmp('Y').zero?
     album = Music.new(publish_date: publish_date, archived: archived, on_spotify: spotify)
-    album.genre = add_genre
-    album.author = add_author
-    album.source = add_source
-    album.label = add_label
+    album = add_categories(album)
     @music_albums.push(album)
     puts 'Album Added successfully'
     puts ' '
@@ -106,10 +125,7 @@ class App
     publish_date = Date.parse(get_user_input('Publish Date (YYYY-MM-DD): '))
     archived = get_user_input('Is it archived? [Y/N]: ').casecmp('Y').zero?
     movie = Movie.new(publish_date: publish_date, archived: archived, silent: silent)
-    movie.genre = add_genre
-    movie.author = add_author
-    movie.source = add_source
-    movie.label = add_label
+    movie = add_categories(movie)
     @movies.push(movie)
     puts 'Movie Added successfully'
     puts ' '
@@ -122,43 +138,11 @@ class App
     publish = Date.parse(get_user_input('Publish Date (YYYY-MM-DD): '))
     archive = get_user_input('Is it archived? [Y/N]: ').casecmp('Y').zero?
     game = Game.new(publish_date: publish, archived: archive, multiplayer: multiplay, last_played_at: last_played)
-    game.genre = add_genre
-    game.author = add_author
-    game.source = add_source
-    game.label = add_label
+    game = add_categories(game)
     @games.push(game)
     puts 'Game Added successfully'
     puts ' '
   end
-
-  # def add_item(**args)
-  #   publish_date = Date.parse(get_user_input('Publish Date (YYYY-MM-DD): '))
-  #   archived = get_user_input('Is it archived? [Y/N]: ').casecmp('Y').zero?
-  #   case args[:class_name]
-  #   when Book
-  #     publisher = args[:publisher]
-  #     cover_state = args[:cover_state]
-  #     item = Book.new(publish_date: publish_date, archived: archived, publisher: publisher, cover_state: cover_state)
-  #   when Music
-  #     on_spotify = args[:on_spotify]
-  #     item = Music.new(publish_date: publish_date, archived: archived, on_spotify: on_spotify)
-  #   when Movie
-  #     silent = args[:silent]
-  #     item = Movie.new(publish_date: publish_date, archived: archived, silent: silent)
-  #   when Game
-  #     multiplayer = args[:multiplayer]
-  #     last_played_at = args[:last_played_at]
-  #     item = Game.new(publish_date: publish_date, archived: archived, multiplayer: multiplayer, last_played_at: last_played_at)
-  #   else
-  #     puts "Invalid item class: #{args[:class_name]}"
-  #     return nil
-  #   end
-  #   item.genre = add_genre
-  #   item.author = add_author
-  #   item.source = add_source
-  #   item.label = add_label
-  #   item
-  # end
 
   def save_data()
     File.write('genres.json', JSON.pretty_generate(@genres))
@@ -171,50 +155,52 @@ class App
     File.write('games.json', JSON.pretty_generate(@games))
   end
 
-  def load_data(file)
-    if File.exist?(file)
-      file_data = JSON.parse(File.read(file))
-      data = []
-      case file
-      when 'books.json'
-        data = parse_data(file_data, file)
-      when 'music_albums.json'
-        data = parse_data(file_data, file)
-      when 'movies.json'
-        data = parse_data(file_data, file)
-      when 'games.json'
-        data = parse_data(file_data, file)
-      when 'genres.json'
-        file_data.map do |genre|
-          item = Genre.new(name: genre['name'])
-          item.id = genre['id']
-          data.push(item)
-        end
-      when 'labels.json'
-        file_data.map do |label|
-          item = Label.new(title: label['title'], color: label['color'])
-          item.id = label['id']
-          data.push(item)
-        end
-      when 'authors.json'
-        file_data.map do |author|
-          item = Author.new(first_name: author['first_name'], last_name: author['last_name'])
-          item.id = author['id']
-          data.push(item)
-        end
-      when 'sources.json'
-        file_data.map do |source|
-          item = Source.new(name: source['name'])
-          item.id = source['id']
-          data.push(item)
-        end
-      else
-        puts "#{file} does not exist!"
-      end
-      return data
-    end
-    []
-  end
+  # Correct After it
+
+  # def load_data(file)
+  #   if File.exist?(file)
+  #     file_data = JSON.parse(File.read(file))
+  #     data = []
+  #     case file
+  #     when 'books.json'
+  #       data = parse_data(file_data, file)
+  #     when 'music_albums.json'
+  #       data = parse_data(file_data, file)
+  #     when 'movies.json'
+  #       data = parse_data(file_data, file)
+  #     when 'games.json'
+  #       data = parse_data(file_data, file)
+  #     when 'genres.json'
+  #       file_data.map do |genre|
+  #         item = Genre.new(name: genre['name'])
+  #         item.id = genre['id']
+  #         data.push(item)
+  #       end
+  #     when 'labels.json'
+  #       file_data.map do |label|
+  #         item = Label.new(title: label['title'], color: label['color'])
+  #         item.id = label['id']
+  #         data.push(item)
+  #       end
+  #     when 'authors.json'
+  #       file_data.map do |author|
+  #         item = Author.new(first_name: author['first_name'], last_name: author['last_name'])
+  #         item.id = author['id']
+  #         data.push(item)
+  #       end
+  #     when 'sources.json'
+  #       file_data.map do |source|
+  #         item = Source.new(name: source['name'])
+  #         item.id = source['id']
+  #         data.push(item)
+  #       end
+  #     else
+  #       puts "#{file} does not exist!"
+  #     end
+  #     return data
+  #   end
+  #   []
+  # end
 
   private
 
@@ -260,88 +246,54 @@ class App
     label
   end
 
-  def get_user_input(prompt)
-    print prompt
-    gets.chomp
-  end
-
-  def parse_data(file_data, file)
-    file_data.map do |item|
-      genre = @genres.find { |g| g.name == item['genre']['name'] }
-      source = @sources.find { |s| s.name == item['source']['name'] }
-      author = @authors.find do |a|
-        a.first_name == item['author']['first_name'] && a.last_name == item['author']['last_name']
-      end
-      label = @labels.find { |l| l.title == item['label']['title'] && l.color == item['label']['color'] }
-      case file
-      when 'books.json'
-        book = Book.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'],
-                        publisher: item['publisher'], cover_state: item['cover_state'])
-        book.id = item['id']
-        book.genre = genre
-        book.source = source
-        book.author = author
-        book.label = label
-        book
-      when 'music_albums.json'
-        album = Music.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'],
-                          on_spotify: item['on_spotify'])
-        album.id = item['id']
-        album.genre = genre
-        album.source = source
-        album.author = author
-        album.label = label
-        album
-      when 'movies.json'
-        movie = Movie.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'],
-                          silent: item['silent'])
-        movie.id = item['id']
-        movie.genre = genre
-        movie.source = source
-        movie.author = author
-        movie.label = label
-        movie
-      when 'games.json'
-        game = Game.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'],
-                        multiplayer: item['multiplayer'], last_played_at: Date.parse(item['last_played_at']))
-        game.id = item['id']
-        game.genre = genre
-        game.source = source
-        game.author = author
-        game.label = label
-        game
-      else
-        puts "#{file} does not exist!"
-      end
-    end
-  end
-
-  # def parse_people_data(file_data)
-  #   persons = []
-  #   file_data.map do |person|
-  #     if person.key?('specialization')
-  #       teacher = Teacher.new(person['name'], person['age'], person['specialization'])
-  #       teacher.id = person['id']
-  #       persons.push(teacher)
+  # def parse_data(file_data, file)
+  #   file_data.map do |item|
+  #     genre = @genres.find { |g| g.name == item['genre']['name'] }
+  #     source = @sources.find { |s| s.name == item['source']['name'] }
+  #     author = @authors.find do |a|
+  #       a.first_name == item['author']['first_name'] && a.last_name == item['author']['last_name']
+  #     end
+  #     label = @labels.find { |l| l.title == item['label']['title'] && l.color == item['label']['color'] }
+  #     case file
+  #     when 'books.json'
+  #       book = Book.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'],
+  #                       publisher: item['publisher'], cover_state: item['cover_state'])
+  #       book.id = item['id']
+  #       book.genre = genre
+  #       book.source = source
+  #       book.author = author
+  #       book.label = label
+  #       book
+  #     when 'music_albums.json'
+  #       album = Music.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'],
+  #                         on_spotify: item['on_spotify'])
+  #       album.id = item['id']
+  #       album.genre = genre
+  #       album.source = source
+  #       album.author = author
+  #       album.label = label
+  #       album
+  #     when 'movies.json'
+  #       movie = Movie.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'],
+  #                         silent: item['silent'])
+  #       movie.id = item['id']
+  #       movie.genre = genre
+  #       movie.source = source
+  #       movie.author = author
+  #       movie.label = label
+  #       movie
+  #     when 'games.json'
+  #       game = Game.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'],
+  #                       multiplayer: item['multiplayer'], last_played_at: Date.parse(item['last_played_at']))
+  #       game.id = item['id']
+  #       game.genre = genre
+  #       game.source = source
+  #       game.author = author
+  #       game.label = label
+  #       game
   #     else
-  #       student = Student.new(person['name'], person['age'])
-  #       student.parent_permission = person['parent_permission']
-  #       student.id = person['id']
-  #       persons.push(student)
+  #       puts "#{file} does not exist!"
   #     end
   #   end
-  #   persons
   # end
-
-  def display_items(items, kind)
-    if items.empty?
-      puts "Record of #{kind}: 0 found "
-    else
-      puts "Listing all #{kind}:"
-      items.each_with_index do |item, index|
-        puts "#{index + 1}) #{yield(item)}"
-      end
-      puts ' '
-    end
-  end
 end
