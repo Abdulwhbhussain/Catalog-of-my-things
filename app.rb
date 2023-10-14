@@ -161,29 +161,31 @@ class App
     end
   end
 
+  def parse(file_data, file); end
+
   def load_data(file)
     if File.exist?(file)
       file_data = JSON.parse(File.read(file))
       data = []
       file_categories = ['books.json', 'music_albums.json', 'movies.json', 'games.json']
       data = parse_data(file_data, file) if file_categories.include?(file)
-      case file
-      when 'genres.json'
-        data = parse_items(file_data) { |genre| Genre.new(name: genre['name']) }
-      when 'labels.json'
-        data = parse_items(file_data) { |label| Label.new(title: label['title'], color: label['color']) }
-      when 'authors.json'
+      data = parse_items(file_data) { |genre| Genre.new(name: genre['name']) } if file == 'genres.json'
+      if file == 'labels.json'
+        data = parse_items(file_data) do |label|
+          Label.new(title: label['title'], color: label['color'])
+        end
+      end
+      if file == 'authors.json'
         data = parse_items(file_data) do |author|
           Author.new(first_name: author['first_name'], last_name: author['last_name'])
         end
-      when 'sources.json'
-        data = parse_items(file_data) { |source| Source.new(name: source['name']) }
-      else
-        puts "#{file} does not exist!"
       end
-      return data
+      data = parse_items(file_data) { |source| Source.new(name: source['name']) } if file == 'sources.json'
+      data
+    else
+      puts "#{file} does not exist!"
+      []
     end
-    []
   end
 
   private
