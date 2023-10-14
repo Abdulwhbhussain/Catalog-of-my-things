@@ -153,15 +153,15 @@ class App
   end
 
   def save_data()
-    files = ['genres.json', 'labels.json', 'authors.json', 'sources.json', 'books.json', 'music_albums.json',
-             'movies.json', 'games.json']
-    variables = ['@genres', '@labels', '@authors', '@sources', '@books', '@music_albums', '@movies', '@games']
-    files.each_with_index do |file, index|
-      File.write(file, JSON.pretty_generate(eval(variables[index])))
-    end
+    File.write('genres.json', JSON.pretty_generate(@genres))
+    File.write('labels.json', JSON.pretty_generate(@labels))
+    File.write('authors.json', JSON.pretty_generate(@authors))
+    File.write('sources.json', JSON.pretty_generate(@sources))
+    File.write('books.json', JSON.pretty_generate(@books))
+    File.write('music_albums.json', JSON.pretty_generate(@music_albums))
+    File.write('movies.json', JSON.pretty_generate(@movies))
+    File.write('games.json', JSON.pretty_generate(@games))
   end
-
-  def parse(file_data, file); end
 
   def load_data(file)
     if File.exist?(file)
@@ -231,6 +231,8 @@ class App
     end
     label
   end
+
+  # Correct After it
 
   def parse_data(file_data, file)
     file_data.map do |item|

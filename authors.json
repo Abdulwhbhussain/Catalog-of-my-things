@@ -1,3 +1,22 @@
 [
-
+  {
+    "id": 876,
+    "first_name": "Abdul",
+    "last_name": "Wahab"
+  },
+  {
+    "id": 690,
+    "first_name": "Justin",
+    "last_name": "Bieber"
+  },
+  {
+    "id": 565,
+    "first_name": "Michael",
+    "last_name": "Jordan"
+  },
+  {
+    "id": 851,
+    "first_name": "Sam",
+    "last_name": "Sagri"
+  }
 ]

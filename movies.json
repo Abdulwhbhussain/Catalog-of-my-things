@@ -1,3 +1,26 @@
 [
-
+  {
+    "id": 83,
+    "genre": {
+      "id": 727,
+      "name": "Thriller"
+    },
+    "source": {
+      "id": 302,
+      "name": "Internet"
+    },
+    "label": {
+      "id": 12,
+      "title": "War",
+      "color": "Red"
+    },
+    "author": {
+      "id": 565,
+      "first_name": "Michael",
+      "last_name": "Jordan"
+    },
+    "publish_date": "2014-10-10",
+    "archived": true,
+    "silent": true
+  }
 ]
