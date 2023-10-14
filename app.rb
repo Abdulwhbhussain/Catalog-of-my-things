@@ -28,6 +28,14 @@ def display_items(items, kind)
   end
 end
 
+def parse_items(file_data)
+  file_data.map do |item|
+    itm = yield(item)
+    itm.id = item['id']
+    itm
+  end
+end
+
 class App
   attr_accessor :books, :music_albums, :movies, :games, :genres, :labels, :authors, :sources
 
@@ -145,55 +153,31 @@ class App
   end
 
   def save_data()
-    File.write('genres.json', JSON.pretty_generate(@genres))
-    File.write('labels.json', JSON.pretty_generate(@labels))
-    File.write('authors.json', JSON.pretty_generate(@authors))
-    File.write('sources.json', JSON.pretty_generate(@sources))
-    File.write('books.json', JSON.pretty_generate(@books))
-    File.write('music_albums.json', JSON.pretty_generate(@music_albums))
-    File.write('movies.json', JSON.pretty_generate(@movies))
-    File.write('games.json', JSON.pretty_generate(@games))
+    files = ['genres.json', 'labels.json', 'authors.json', 'sources.json', 'books.json', 'music_albums.json',
+             'movies.json', 'games.json']
+    variables = ['@genres', '@labels', '@authors', '@sources', '@books', '@music_albums', '@movies', '@games']
+    files.each_with_index do |file, index|
+      File.write(file, JSON.pretty_generate(eval(variables[index])))
+    end
   end
-
-  # Correct After it
 
   def load_data(file)
     if File.exist?(file)
       file_data = JSON.parse(File.read(file))
       data = []
+      file_categories = ['books.json', 'music_albums.json', 'movies.json', 'games.json']
+      data = parse_data(file_data, file) if file_categories.include?(file)
       case file
-      when 'books.json'
-        data = parse_data(file_data, file)
-      when 'music_albums.json'
-        data = parse_data(file_data, file)
-      when 'movies.json'
-        data = parse_data(file_data, file)
-      when 'games.json'
-        data = parse_data(file_data, file)
       when 'genres.json'
-        file_data.map do |genre|
-          item = Genre.new(name: genre['name'])
-          item.id = genre['id']
-          data.push(item)
-        end
+        data = parse_items(file_data) { |genre| Genre.new(name: genre['name']) }
       when 'labels.json'
-        file_data.map do |label|
-          item = Label.new(title: label['title'], color: label['color'])
-          item.id = label['id']
-          data.push(item)
-        end
+        data = parse_items(file_data) { |label| Label.new(title: label['title'], color: label['color']) }
       when 'authors.json'
-        file_data.map do |author|
-          item = Author.new(first_name: author['first_name'], last_name: author['last_name'])
-          item.id = author['id']
-          data.push(item)
+        data = parse_items(file_data) do |author|
+          Author.new(first_name: author['first_name'], last_name: author['last_name'])
         end
       when 'sources.json'
-        file_data.map do |source|
-          item = Source.new(name: source['name'])
-          item.id = source['id']
-          data.push(item)
-        end
+        data = parse_items(file_data) { |source| Source.new(name: source['name']) }
       else
         puts "#{file} does not exist!"
       end

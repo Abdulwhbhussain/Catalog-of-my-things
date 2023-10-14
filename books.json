@@ -1,27 +1,3 @@
 [
-  {
-    "id": 509,
-    "genre": {
-      "id": 667,
-      "name": "philosophy"
-    },
-    "source": {
-      "id": 762,
-      "name": "Shop"
-    },
-    "label": {
-      "id": 51,
-      "title": "warrior",
-      "color": "Yellow"
-    },
-    "author": {
-      "id": 254,
-      "first_name": "Wahab",
-      "last_name": "Hussain"
-    },
-    "publish_date": "2021-04-05",
-    "archived": true,
-    "publisher": "WH publications",
-    "cover_state": "good"
-  }
+
 ]

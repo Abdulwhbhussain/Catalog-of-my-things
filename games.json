@@ -1,27 +1,3 @@
 [
-  {
-    "id": 49,
-    "genre": {
-      "id": 378,
-      "name": "Adventure"
-    },
-    "source": {
-      "id": 920,
-      "name": "Internet"
-    },
-    "label": {
-      "id": 612,
-      "title": "Uncharted",
-      "color": "Blue"
-    },
-    "author": {
-      "id": 77,
-      "first_name": "Abdul",
-      "last_name": "Wahab"
-    },
-    "publish_date": "2004-05-06",
-    "archived": true,
-    "multiplayer": true,
-    "last_played_at": "2023-09-07"
-  }
+
 ]
