@@ -36,6 +36,43 @@ def parse_items(file_data)
   end
 end
 
+def choose_item(file, item)
+  case file
+  when 'books.json'
+    Book.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'],
+             publisher: item['publisher'], cover_state: item['cover_state'])
+  when 'music_albums.json'
+    Music.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'],
+              on_spotify: item['on_spotify'])
+  when 'movies.json'
+    Movie.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'],
+              silent: item['silent'])
+  when 'games.json'
+    Game.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'],
+             multiplayer: item['multiplayer'], last_played_at: Date.parse(item['last_played_at']))
+  else
+    puts "#{file} does not exist!"
+  end
+end
+
+def fill_data(file_data, file, genres_and_sources, labels_and_authors)
+  file_data.map do |item|
+    genre = genres_and_sources[0].find { |g| g.name == item['genre']['name'] }
+    source = genres_and_sources[1].find { |s| s.name == item['source']['name'] }
+    author = labels_and_authors[1].find do |a|
+      a.first_name == item['author']['first_name'] && a.last_name == item['author']['last_name']
+    end
+    label = labels_and_authors[0].find { |l| l.title == item['label']['title'] && l.color == item['label']['color'] }
+    item_var = choose_item(file, item)
+    item_var.id = item['id']
+    item_var.genre = genre
+    item_var.source = source
+    item_var.author = author
+    item_var.label = label
+    item_var
+  end
+end
+
 class App
   attr_accessor :books, :music_albums, :movies, :games, :genres, :labels, :authors, :sources
 
@@ -58,7 +95,7 @@ class App
 
   def music_albums_list()
     display_items(@music_albums, 'Music Albums') do |album|
-      "Album Id: #{album.id}, , Music Name: #{album.label.title}, On Spotify: #{album.on_spotify}"
+      "Album Id: #{album.id}, Music Name: #{album.label.title}, On Spotify: #{album.on_spotify}"
     end
   end
 
@@ -70,7 +107,7 @@ class App
 
   def games_list()
     display_items(@games, 'Games') do |game|
-      "Game Id: #{game.id}, Game Name: #{game.label.title}, , Multiplayer: #{game.multiplayer}"
+      "Game Id: #{game.id}, Game Name: #{game.label.title}, Multiplayer: #{game.multiplayer}"
     end
   end
 
@@ -232,56 +269,9 @@ class App
     label
   end
 
-  # Correct After it
-
   def parse_data(file_data, file)
-    file_data.map do |item|
-      genre = @genres.find { |g| g.name == item['genre']['name'] }
-      source = @sources.find { |s| s.name == item['source']['name'] }
-      author = @authors.find do |a|
-        a.first_name == item['author']['first_name'] && a.last_name == item['author']['last_name']
-      end
-      label = @labels.find { |l| l.title == item['label']['title'] && l.color == item['label']['color'] }
-      case file
-      when 'books.json'
-        book = Book.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'],
-                        publisher: item['publisher'], cover_state: item['cover_state'])
-        book.id = item['id']
-        book.genre = genre
-        book.source = source
-        book.author = author
-        book.label = label
-        book
-      when 'music_albums.json'
-        album = Music.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'],
-                          on_spotify: item['on_spotify'])
-        album.id = item['id']
-        album.genre = genre
-        album.source = source
-        album.author = author
-        album.label = label
-        album
-      when 'movies.json'
-        movie = Movie.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'],
-                          silent: item['silent'])
-        movie.id = item['id']
-        movie.genre = genre
-        movie.source = source
-        movie.author = author
-        movie.label = label
-        movie
-      when 'games.json'
-        game = Game.new(publish_date: Date.parse(item['publish_date']), archived: item['archived'],
-                        multiplayer: item['multiplayer'], last_played_at: Date.parse(item['last_played_at']))
-        game.id = item['id']
-        game.genre = genre
-        game.source = source
-        game.author = author
-        game.label = label
-        game
-      else
-        puts "#{file} does not exist!"
-      end
-    end
+    genres_and_sources = [@genres, @sources]
+    labels_and_authors = [@labels, @authors]
+    fill_data(file_data, file, genres_and_sources, labels_and_authors)
   end
 end
