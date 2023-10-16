@@ -10,6 +10,7 @@ require_relative 'classes/author'
 require_relative 'classes/source'
 require_relative 'classes/genre'
 require_relative 'classes/label'
+# require_relative 'data_loader'
 
 def get_user_input(prompt)
   print prompt
@@ -57,12 +58,10 @@ end
 
 def fill_data(file_data, file, genres_and_sources, labels_and_authors)
   file_data.map do |item|
-    genre = genres_and_sources[0].find { |g| g.name == item['genre']['name'] }
-    source = genres_and_sources[1].find { |s| s.name == item['source']['name'] }
-    author = labels_and_authors[1].find do |a|
-      a.first_name == item['author']['first_name'] && a.last_name == item['author']['last_name']
-    end
-    label = labels_and_authors[0].find { |l| l.title == item['label']['title'] && l.color == item['label']['color'] }
+    genre = find_genre(genres_and_sources[0], item)
+    source = find_source(genres_and_sources[1], item)
+    author = find_author(labels_and_authors[1], item)
+    label = find_label(labels_and_authors[0], item)
     item_var = choose_item(file, item)
     item_var.id = item['id']
     item_var.genre = genre
@@ -71,6 +70,24 @@ def fill_data(file_data, file, genres_and_sources, labels_and_authors)
     item_var.label = label
     item_var
   end
+end
+
+def find_genre(genres, item)
+  genres.find { |g| g.name == item['genre']['name'] }
+end
+
+def find_source(sources, item)
+  sources.find { |s| s.name == item['source']['name'] }
+end
+
+def find_author(authors, item)
+  authors.find do |a|
+    a.first_name == item['author']['first_name'] && a.last_name == item['author']['last_name']
+  end
+end
+
+def find_label(labels, item)
+  labels.find { |l| l.title == item['label']['title'] && l.color == item['label']['color'] }
 end
 
 class App
@@ -86,6 +103,18 @@ class App
     @movies = load_data('movies.json') # []
     @games = load_data('games.json') # []
   end
+
+  # def initialize
+  #   data_loader = DataLoader.new
+  #   @genres = data_loader.load_data('genres.json') # []
+  #   @labels = data_loader.load_data('labels.json') # []
+  #   @authors = data_loader.load_data('authors.json') # []
+  #   @sources = data_loader.load_data('sources.json') # []
+  #   @books = data_loader.load_data('books.json') # []
+  #   @music_albums = data_loader.load_data('music_albums.json') # []
+  #   @movies = data_loader.load_data('movies.json') # []
+  #   @games = data_loader.load_data('games.json') # []
+  # end
 
   def books_list()
     display_items(@books, 'Books') do |book|
@@ -203,26 +232,42 @@ class App
   def load_data(file)
     if File.exist?(file)
       file_data = JSON.parse(File.read(file))
-      data = []
-      file_categories = ['books.json', 'music_albums.json', 'movies.json', 'games.json']
-      data = parse_data(file_data, file) if file_categories.include?(file)
-      data = parse_items(file_data) { |genre| Genre.new(name: genre['name']) } if file == 'genres.json'
-      if file == 'labels.json'
-        data = parse_items(file_data) do |label|
-          Label.new(title: label['title'], color: label['color'])
-        end
-      end
-      if file == 'authors.json'
-        data = parse_items(file_data) do |author|
-          Author.new(first_name: author['first_name'], last_name: author['last_name'])
-        end
-      end
-      data = parse_items(file_data) { |source| Source.new(name: source['name']) } if file == 'sources.json'
-      data
+      parse_data_based_on_file(file_data, file)
     else
       puts "#{file} does not exist!"
       []
     end
+  end
+
+  def parse_data_based_on_file(file_data, file)
+    data = []
+    file_categories = ['books.json', 'music_albums.json', 'movies.json', 'games.json']
+    data = parse_data(file_data, file) if file_categories.include?(file)
+    data = parse_genre(file_data) if file == 'genres.json'
+    data = parse_label(file_data) if file == 'labels.json'
+    data = parse_author(file_data) if file == 'authors.json'
+    data = parse_source(file_data) if file == 'sources.json'
+    data
+  end
+
+  def parse_genre(file_data)
+    parse_items(file_data) { |genre| Genre.new(name: genre['name']) }
+  end
+
+  def parse_label(file_data)
+    parse_items(file_data) do |label|
+      Label.new(title: label['title'], color: label['color'])
+    end
+  end
+
+  def parse_author(file_data)
+    parse_items(file_data) do |author|
+      Author.new(first_name: author['first_name'], last_name: author['last_name'])
+    end
+  end
+
+  def parse_source(file_data)
+    parse_items(file_data) { |source| Source.new(name: source['name']) }
   end
 
   private
