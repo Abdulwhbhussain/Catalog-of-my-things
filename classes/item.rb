@@ -35,9 +35,11 @@ class Item
   end
 
   def move_to_archive()
-    return true if can_be_archived?
-
-    false
+    if can_be_archived?
+      @archived = true
+    else
+      puts "This item can't be archived"
+    end
   end
 
   private
