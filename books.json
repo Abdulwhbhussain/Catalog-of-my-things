@@ -1,27 +1,3 @@
 [
-  {
-    "id": 308,
-    "genre": {
-      "id": 652,
-      "name": "Philosophy"
-    },
-    "source": {
-      "id": 628,
-      "name": "Shop"
-    },
-    "label": {
-      "id": 465,
-      "title": "End of War",
-      "color": "Black"
-    },
-    "author": {
-      "id": 876,
-      "first_name": "Abdul",
-      "last_name": "Wahab"
-    },
-    "publish_date": "2022-02-02",
-    "archived": false,
-    "publisher": "WH publications",
-    "cover_state": "bad"
-  }
+  
 ]

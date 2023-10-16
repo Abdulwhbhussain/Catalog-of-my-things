@@ -1,26 +1,2 @@
 [
-  {
-    "id": 730,
-    "genre": {
-      "id": 387,
-      "name": "Pop"
-    },
-    "source": {
-      "id": 302,
-      "name": "Internet"
-    },
-    "label": {
-      "id": 39,
-      "title": "One World",
-      "color": "Blue"
-    },
-    "author": {
-      "id": 690,
-      "first_name": "Justin",
-      "last_name": "Bieber"
-    },
-    "publish_date": "2021-05-06",
-    "archived": true,
-    "on_spotify": true
-  }
 ]
