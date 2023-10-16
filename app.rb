@@ -10,7 +10,6 @@ require_relative 'classes/author'
 require_relative 'classes/source'
 require_relative 'classes/genre'
 require_relative 'classes/label'
-# require_relative 'data_loader'
 
 def get_user_input(prompt)
   print prompt
@@ -90,6 +89,37 @@ def find_label(labels, item)
   labels.find { |l| l.title == item['label']['title'] && l.color == item['label']['color'] }
 end
 
+def parse_data_based_on_file(file_data, file)
+  data = []
+  file_categories = ['books.json', 'music_albums.json', 'movies.json', 'games.json']
+  data = parse_data(file_data, file) if file_categories.include?(file)
+  data = parse_genre(file_data) if file == 'genres.json'
+  data = parse_label(file_data) if file == 'labels.json'
+  data = parse_author(file_data) if file == 'authors.json'
+  data = parse_source(file_data) if file == 'sources.json'
+  data
+end
+
+def parse_genre(file_data)
+  parse_items(file_data) { |genre| Genre.new(name: genre['name']) }
+end
+
+def parse_label(file_data)
+  parse_items(file_data) do |label|
+    Label.new(title: label['title'], color: label['color'])
+  end
+end
+
+def parse_author(file_data)
+  parse_items(file_data) do |author|
+    Author.new(first_name: author['first_name'], last_name: author['last_name'])
+  end
+end
+
+def parse_source(file_data)
+  parse_items(file_data) { |source| Source.new(name: source['name']) }
+end
+
 class App
   attr_accessor :books, :music_albums, :movies, :games, :genres, :labels, :authors, :sources
 
@@ -103,18 +133,6 @@ class App
     @movies = load_data('movies.json') # []
     @games = load_data('games.json') # []
   end
-
-  # def initialize
-  #   data_loader = DataLoader.new
-  #   @genres = data_loader.load_data('genres.json') # []
-  #   @labels = data_loader.load_data('labels.json') # []
-  #   @authors = data_loader.load_data('authors.json') # []
-  #   @sources = data_loader.load_data('sources.json') # []
-  #   @books = data_loader.load_data('books.json') # []
-  #   @music_albums = data_loader.load_data('music_albums.json') # []
-  #   @movies = data_loader.load_data('movies.json') # []
-  #   @games = data_loader.load_data('games.json') # []
-  # end
 
   def books_list()
     display_items(@books, 'Books') do |book|
@@ -237,37 +255,6 @@ class App
       puts "#{file} does not exist!"
       []
     end
-  end
-
-  def parse_data_based_on_file(file_data, file)
-    data = []
-    file_categories = ['books.json', 'music_albums.json', 'movies.json', 'games.json']
-    data = parse_data(file_data, file) if file_categories.include?(file)
-    data = parse_genre(file_data) if file == 'genres.json'
-    data = parse_label(file_data) if file == 'labels.json'
-    data = parse_author(file_data) if file == 'authors.json'
-    data = parse_source(file_data) if file == 'sources.json'
-    data
-  end
-
-  def parse_genre(file_data)
-    parse_items(file_data) { |genre| Genre.new(name: genre['name']) }
-  end
-
-  def parse_label(file_data)
-    parse_items(file_data) do |label|
-      Label.new(title: label['title'], color: label['color'])
-    end
-  end
-
-  def parse_author(file_data)
-    parse_items(file_data) do |author|
-      Author.new(first_name: author['first_name'], last_name: author['last_name'])
-    end
-  end
-
-  def parse_source(file_data)
-    parse_items(file_data) { |source| Source.new(name: source['name']) }
   end
 
   private
