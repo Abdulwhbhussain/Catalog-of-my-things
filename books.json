@@ -23,5 +23,30 @@
     "archived": false,
     "publisher": "WH publications",
     "cover_state": "bad"
+  },
+  {
+    "id": 639,
+    "genre": {
+      "id": 579,
+      "name": "Philanthropy"
+    },
+    "source": {
+      "id": 40,
+      "name": "Book Shop"
+    },
+    "label": {
+      "id": 790,
+      "title": "Envirnoment",
+      "color": "Blue"
+    },
+    "author": {
+      "id": 37,
+      "first_name": "Mendez",
+      "last_name": "Major"
+    },
+    "publish_date": "2001-02-07",
+    "archived": false,
+    "publisher": "AS Publications",
+    "cover_state": "bad"
   }
 ]

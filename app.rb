@@ -120,6 +120,56 @@ def parse_source(file_data)
   parse_items(file_data) { |source| Source.new(name: source['name']) }
 end
 
+def add_categories(item, genres, authors, sources, labels)
+  item.genre = add_genre(genres)
+  item.author = add_author(authors)
+  item.source = add_source(sources)
+  item.label = add_label(labels)
+  item
+end
+
+def add_genre(genres)
+  genre_name = get_user_input('Genre: ')
+  genre = genres.find { |g| g.name == genre_name }
+  if genre.nil?
+    genre = Genre.new(name: genre_name)
+    genres.push(genre)
+  end
+  genre
+end
+
+def add_author(authors)
+  first_name = get_user_input('First Name of Author: ')
+  last_name = get_user_input('Last Name of Author: ')
+  author = authors.find { |a| a.first_name == first_name && a.last_name == last_name }
+  if author.nil?
+    author = Author.new(first_name: first_name, last_name: last_name)
+    authors.push(author)
+  end
+  author
+end
+
+def add_source(sources)
+  source_name = get_user_input('Source: ')
+  source = sources.find { |s| s.name == source_name }
+  if source.nil?
+    source = Source.new(name: source_name)
+    sources.push(source)
+  end
+  source
+end
+
+def add_label(labels)
+  label_title = get_user_input('Title: ')
+  label_color = get_user_input('Color: ')
+  label = labels.find { |l| l.title == label_title && l.color == label_color }
+  if label.nil?
+    label = Label.new(title: label_title, color: label_color)
+    labels.push(label)
+  end
+  label
+end
+
 class App
   attr_accessor :books, :music_albums, :movies, :games, :genres, :labels, :authors, :sources
 
@@ -178,14 +228,6 @@ class App
     end
   end
 
-  def add_categories(item)
-    item.genre = add_genre
-    item.author = add_author
-    item.source = add_source
-    item.label = add_label
-    item
-  end
-
   def add_book()
     puts 'Adding a book:'
     publisher = get_user_input('Publisher: ')
@@ -193,7 +235,7 @@ class App
     publish_date = Date.parse(get_user_input('Publish Date (YYYY-MM-DD): '))
     archived = get_user_input('Is it archived? [Y/N]: ').casecmp('Y').zero?
     book = Book.new(publish_date: publish_date, archived: archived, publisher: publisher, cover_state: cover_state)
-    book = add_categories(book)
+    book = add_categories(book, @genres, @authors, @sources, @labels)
     @books.push(book)
     puts 'Book Added successfully'
     puts ' '
@@ -205,7 +247,7 @@ class App
     publish_date = Date.parse(get_user_input('Publish Date (YYYY-MM-DD): '))
     archived = get_user_input('Is it archived? [Y/N]: ').casecmp('Y').zero?
     album = Music.new(publish_date: publish_date, archived: archived, on_spotify: spotify)
-    album = add_categories(album)
+    album = add_categories(album, @genres, @authors, @sources, @labels)
     @music_albums.push(album)
     puts 'Album Added successfully'
     puts ' '
@@ -217,7 +259,7 @@ class App
     publish_date = Date.parse(get_user_input('Publish Date (YYYY-MM-DD): '))
     archived = get_user_input('Is it archived? [Y/N]: ').casecmp('Y').zero?
     movie = Movie.new(publish_date: publish_date, archived: archived, silent: silent)
-    movie = add_categories(movie)
+    movie = add_categories(movie, @genres, @authors, @sources, @labels)
     @movies.push(movie)
     puts 'Movie Added successfully'
     puts ' '
@@ -230,7 +272,7 @@ class App
     publish = Date.parse(get_user_input('Publish Date (YYYY-MM-DD): '))
     archive = get_user_input('Is it archived? [Y/N]: ').casecmp('Y').zero?
     game = Game.new(publish_date: publish, archived: archive, multiplayer: multiplay, last_played_at: last_played)
-    game = add_categories(game)
+    game = add_categories(game, @genres, @authors, @sources, @labels)
     @games.push(game)
     puts 'Game Added successfully'
     puts ' '
@@ -258,48 +300,6 @@ class App
   end
 
   private
-
-  def add_genre()
-    genre_name = get_user_input('Genre: ')
-    genre = @genres.find { |g| g.name == genre_name }
-    if genre.nil?
-      genre = Genre.new(name: genre_name)
-      @genres.push(genre)
-    end
-    genre
-  end
-
-  def add_author()
-    first_name = get_user_input('First Name of Author: ')
-    last_name = get_user_input('Last Name of Author: ')
-    author = @authors.find { |a| a.first_name == first_name && a.last_name == last_name }
-    if author.nil?
-      author = Author.new(first_name: first_name, last_name: last_name)
-      authors.push(author)
-    end
-    author
-  end
-
-  def add_source()
-    source_name = get_user_input('Source: ')
-    source = @sources.find { |s| s.name == source_name }
-    if source.nil?
-      source = Source.new(name: source_name)
-      @sources.push(source)
-    end
-    source
-  end
-
-  def add_label()
-    label_title = get_user_input('Title: ')
-    label_color = get_user_input('Color: ')
-    label = @labels.find { |l| l.title == label_title && l.color == label_color }
-    if label.nil?
-      label = Label.new(title: label_title, color: label_color)
-      @labels.push(label)
-    end
-    label
-  end
 
   def parse_data(file_data, file)
     genres_and_sources = [@genres, @sources]
