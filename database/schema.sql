@@ -45,3 +45,17 @@ CREATE TABLE games(
   multiplayer BOOLEAN NOT NULL,
   last_played_at DATE NOT NULL
 );
+CREATE TABLE sources(
+  id INT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
+  name VARCHAR(250) NOT NULL
+);
+CREATE TABLE movies(
+  id INT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
+  author_id INT REFERENCES authors(id),
+  genre_id INT REFERENCES genres(id),
+  source_id INT REFERENCES sources(id),
+  label_id INT REFERENCES labels(id),
+  publish_date DATE NOT NULL,
+  archived BOOLEAN NOT NULL,
+  silent BOOLEAN NOT NULL
+);
