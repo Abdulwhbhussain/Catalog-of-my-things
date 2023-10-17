@@ -20,7 +20,7 @@
 # 📖 Catalog of my things <a name="about-project"></a>
 
 
-**Catalog of my things** is an application that manages a catalog system with ruby classes: movies, musics, games, books and its properties .
+**Catalog of my things** In this project, you will create a console app that will help you to keep a record of different types of things you own: books, music albums, movies, and games. Everything will be based on the UML class diagram presented below. The data will be stored in JSON files but you will also prepare a database with tables structure analogical to your program's class structure.
 
 ## 🛠 Built With <a name="built-with"></a>
 ### Tech Stack <a name="tech-stack"></a>
