@@ -43,7 +43,7 @@ This project is built with Ruby.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-🚀 Video link (https://drive.google.com/file/d/1gBlswbNlEg1XGpA8UVfsA-lKVB6sDWcv/view?usp=drive_link)
+🚀 Video link [Presentation Video](https://drive.google.com/file/d/14wTo8OVZn98DVXHkkWUpaNdxgIg9axBB/view?usp=drivesdk)
 
 ## 💻 Getting Started <a name="getting-started"></a>
 To get a local copy up and running, follow these steps.
