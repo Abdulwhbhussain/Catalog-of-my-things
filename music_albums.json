@@ -1,3 +1,26 @@
 [
-
+  {
+    "id": 743,
+    "genre": {
+      "id": 984,
+      "name": "Pop"
+    },
+    "source": {
+      "id": 621,
+      "name": "Internet"
+    },
+    "label": {
+      "id": 566,
+      "title": "Never say never",
+      "color": "Gray"
+    },
+    "author": {
+      "id": 567,
+      "first_name": "Justin",
+      "last_name": "Bieber"
+    },
+    "publish_date": "2019-05-25",
+    "archived": true,
+    "on_spotify": true
+  }
 ]

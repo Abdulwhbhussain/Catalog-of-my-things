@@ -1,3 +1,27 @@
 [
-
+  {
+    "id": 901,
+    "genre": {
+      "id": 237,
+      "name": "Comedy"
+    },
+    "source": {
+      "id": 621,
+      "name": "Internet"
+    },
+    "label": {
+      "id": 111,
+      "title": "The laugh moment",
+      "color": "Blue"
+    },
+    "author": {
+      "id": 713,
+      "first_name": "Mouhamed",
+      "last_name": "Ndiaye"
+    },
+    "publish_date": "2023-10-01",
+    "archived": false,
+    "publisher": "HD records",
+    "cover_state": "good"
+  }
 ]
