@@ -20,7 +20,7 @@
 # 📖 Catalog of my things <a name="about-project"></a>
 
 
-**Catalog of my things** In this project, we have created a console app that helps you keep a record of different types of things you own, such: as books, music albums, movies, and games. Everything is based on the UML class diagram presented below. The data has been stored in JSON files but we also work on a database with tables structure analogical to your program's class structure.
+**Catalog of my things** In this project, we have created a console app that helps us keep a record of our differents types of things you own, such: as books, music albums, movies, and games. Everything is based on the UML class diagram presented below. The data has been stored in JSON files but we also work on a database with tables structure analogical to your program's class structure.
 
 ## 🛠 Built With <a name="built-with"></a>
 ### Tech Stack <a name="tech-stack"></a>
